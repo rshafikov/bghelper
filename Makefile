@@ -44,6 +44,8 @@ clean:
 	$(GOCLEAN)
 	rm -f $(BINARY_NAME)
 	rm -rf $(BUILD_DIR)
+	rm coverage.*
+	rm process.test storage.test
 
 ## test: Run tests
 test:
