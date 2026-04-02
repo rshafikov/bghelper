@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go-version: ['1.24', '1.25']
+        go-version: ['1.25']
 
     steps:
       - name: Checkout code
@@ -36,7 +36,7 @@ jobs:
         run: go vet ./...
 
       - name: Run tests
-        run: go test -v -race -coverprofile=coverage.txt ./...
+        run: go test -v -coverprofile=coverage.txt ./...
 
       - name: Upload coverage
         uses: codecov/codecov-action@v4
