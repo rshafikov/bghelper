@@ -1,7 +1,6 @@
 package storage
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -12,7 +11,7 @@ import (
 
 func TestFileStoreSaveAndLoad(t *testing.T) {
 	// Create temp directory for testing
-	tmpDir, err := ioutil.TempDir("", "bghelper-test-")
+	tmpDir, err := os.MkdirTemp("", "bghelper-test-")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
@@ -63,7 +62,7 @@ func TestFileStoreSaveAndLoad(t *testing.T) {
 
 func TestFileStoreList(t *testing.T) {
 	// Create temp directory for testing
-	tmpDir, err := ioutil.TempDir("", "bghelper-test-")
+	tmpDir, err := os.MkdirTemp("", "bghelper-test-")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
@@ -121,7 +120,7 @@ func TestFileStoreList(t *testing.T) {
 
 func TestFileStoreDelete(t *testing.T) {
 	// Create temp directory for testing
-	tmpDir, err := ioutil.TempDir("", "bghelper-test-")
+	tmpDir, err := os.MkdirTemp("", "bghelper-test-")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
@@ -160,7 +159,7 @@ func TestFileStoreDelete(t *testing.T) {
 
 func TestFileStoreLoadNotFound(t *testing.T) {
 	// Create temp directory for testing
-	tmpDir, err := ioutil.TempDir("", "bghelper-test-")
+	tmpDir, err := os.MkdirTemp("", "bghelper-test-")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
@@ -182,7 +181,7 @@ func TestFileStoreLoadNotFound(t *testing.T) {
 
 func TestFileStoreEnsureStorageDir(t *testing.T) {
 	// Create temp directory for testing
-	tmpDir, err := ioutil.TempDir("", "bghelper-test-")
+	tmpDir, err := os.MkdirTemp("", "bghelper-test-")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
@@ -217,7 +216,7 @@ func TestFileStoreEnsureStorageDir(t *testing.T) {
 
 func TestFileStoreAtomicWrites(t *testing.T) {
 	// Create temp directory for testing
-	tmpDir, err := ioutil.TempDir("", "bghelper-test-")
+	tmpDir, err := os.MkdirTemp("", "bghelper-test-")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
@@ -240,7 +239,7 @@ func TestFileStoreAtomicWrites(t *testing.T) {
 	}
 
 	// Verify temp files don't remain
-	entries, err := ioutil.ReadDir(tmpDir)
+	entries, err := os.ReadDir(tmpDir)
 	if err != nil {
 		t.Fatalf("Failed to read storage directory: %v", err)
 	}
@@ -270,7 +269,7 @@ func TestFileStoreAtomicWrites(t *testing.T) {
 
 func TestFileStoreEmptyList(t *testing.T) {
 	// Create temp directory for testing
-	tmpDir, err := ioutil.TempDir("", "bghelper-test-")
+	tmpDir, err := os.MkdirTemp("", "bghelper-test-")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}

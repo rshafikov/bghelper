@@ -41,13 +41,14 @@ func RefreshStatus(p *Process) bool {
 
 	// Process is not alive anymore - determine status based on exit code
 	// If we have no exit code set, assume it exited cleanly
-	if p.ExitCode == nil {
+	switch {
+	case p.ExitCode == nil:
 		exitCode := 0
 		p.ExitCode = &exitCode
 		p.Status = StatusStopped
-	} else if *p.ExitCode == 0 {
+	case *p.ExitCode == 0:
 		p.Status = StatusStopped
-	} else {
+	default:
 		p.Status = StatusCrashed
 	}
 

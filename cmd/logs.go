@@ -60,7 +60,9 @@ Example:
 		if err != nil {
 			return fmt.Errorf("failed to open log file: %w", err)
 		}
-		defer logFile.Close()
+		defer func(logFile *os.File) {
+			_ = logFile.Close()
+		}(logFile)
 
 		if follow {
 			// Follow mode: stream logs in real-time

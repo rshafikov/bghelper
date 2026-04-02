@@ -61,7 +61,10 @@ func (m *Manager) Start(id string, command string) (*Process, error) {
 	cmd.Stderr = logFile
 
 	if err := cmd.Start(); err != nil {
-		logFile.Close()
+		err := logFile.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, fmt.Errorf("failed to start process: %w", err)
 	}
 
@@ -137,7 +140,10 @@ func (m *Manager) monitorProcess(id string, cmd *exec.Cmd, logFile io.Closer) {
 
 	// Close log file after process exits
 	if logFile != nil {
-		logFile.Close()
+		err := logFile.Close()
+		if err != nil {
+			return
+		}
 	}
 
 	m.mu.Lock()
@@ -264,7 +270,10 @@ func (m *Manager) Restart(id string) (*Process, error) {
 			// Try graceful shutdown first
 			if err := proc.Signal(os.Interrupt); err != nil {
 				// If graceful fails, force kill
-				proc.Kill()
+				err := proc.Kill()
+				if err != nil {
+					return nil, err
+				}
 			}
 			// Wait a moment for process to exit
 			time.Sleep(100 * time.Millisecond)
@@ -273,7 +282,10 @@ func (m *Manager) Restart(id string) (*Process, error) {
 
 	// Clear log file for fresh start
 	if p.LogsPath != "" {
-		os.Truncate(p.LogsPath, 0)
+		err := os.Truncate(p.LogsPath, 0)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	// Reset process state for restart
@@ -302,7 +314,10 @@ func (m *Manager) Restart(id string) (*Process, error) {
 	cmd.Stderr = logFile
 
 	if err := cmd.Start(); err != nil {
-		logFile.Close()
+		err := logFile.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, fmt.Errorf("failed to start process: %w", err)
 	}
 

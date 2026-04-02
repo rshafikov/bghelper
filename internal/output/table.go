@@ -185,11 +185,3 @@ func formatTimeCompact(t time.Time) string {
 	}
 	return t.Format("01-02 15:04")
 }
-
-// formatTime formats a time value for display
-func formatTime(t time.Time) string {
-	if t.IsZero() {
-		return "N/A"
-	}
-	return t.Format("2006-01-02 15:04:05")
-}

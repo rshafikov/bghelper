@@ -1,7 +1,6 @@
 package process_test
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"testing"
@@ -13,7 +12,7 @@ import (
 
 func TestManagerStartAndPersist(t *testing.T) {
 	// Create temp storage directory
-	tmpDir, err := ioutil.TempDir("", "bghelper-manager-test-")
+	tmpDir, err := os.MkdirTemp("", "bghelper-manager-test-")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
@@ -63,7 +62,7 @@ func TestManagerStartAndPersist(t *testing.T) {
 
 func TestManagerStopAndPersist(t *testing.T) {
 	// Create temp storage directory
-	tmpDir, err := ioutil.TempDir("", "bghelper-manager-test-")
+	tmpDir, err := os.MkdirTemp("", "bghelper-manager-test-")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
@@ -73,7 +72,7 @@ func TestManagerStopAndPersist(t *testing.T) {
 	manager := process.NewManager(store)
 
 	// Start a process
-	p, err := manager.Start("test-stop-001", "sleep 1")
+	_, err = manager.Start("test-stop-001", "sleep 1")
 	if err != nil {
 		t.Fatalf("Failed to start process: %v", err)
 	}
@@ -90,7 +89,7 @@ func TestManagerStopAndPersist(t *testing.T) {
 	time.Sleep(200 * time.Millisecond)
 
 	// Verify status changed to stopped
-	p, err = manager.Get("test-stop-001")
+	p, err := manager.Get("test-stop-001")
 	if err != nil {
 		t.Fatalf("Failed to get process: %v", err)
 	}
@@ -123,7 +122,7 @@ func TestManagerStopAndPersist(t *testing.T) {
 
 func TestManagerStateChangePersistence(t *testing.T) {
 	// Create temp storage directory
-	tmpDir, err := ioutil.TempDir("", "bghelper-manager-test-")
+	tmpDir, err := os.MkdirTemp("", "bghelper-manager-test-")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
@@ -176,7 +175,7 @@ func TestManagerStateChangePersistence(t *testing.T) {
 
 func TestManagerPersistenceWithinOneSecond(t *testing.T) {
 	// Create temp storage directory
-	tmpDir, err := ioutil.TempDir("", "bghelper-manager-test-")
+	tmpDir, err := os.MkdirTemp("", "bghelper-manager-test-")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
@@ -219,7 +218,7 @@ func TestManagerPersistenceWithinOneSecond(t *testing.T) {
 
 func TestManagerDeleteAndPersist(t *testing.T) {
 	// Create temp storage directory
-	tmpDir, err := ioutil.TempDir("", "bghelper-manager-test-")
+	tmpDir, err := os.MkdirTemp("", "bghelper-manager-test-")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
@@ -261,7 +260,7 @@ func TestManagerDeleteAndPersist(t *testing.T) {
 
 func TestManagerUnloadAfterPersist(t *testing.T) {
 	// Test that process can be removed from memory but remains in storage
-	tmpDir, err := ioutil.TempDir("", "bghelper-manager-test-")
+	tmpDir, err := os.MkdirTemp("", "bghelper-manager-test-")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}

@@ -2,7 +2,6 @@ package storage
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -45,7 +44,7 @@ func (s *FileStore) Save(p *process.Process) error {
 	}
 
 	// Create temp file
-	tempFile, err := ioutil.TempFile(s.baseDir, fmt.Sprintf(".%s-*.yaml", p.ID))
+	tempFile, err := os.CreateTemp(s.baseDir, fmt.Sprintf(".%s-*.yaml", p.ID))
 	if err != nil {
 		return fmt.Errorf("failed to create temp file: %w", err)
 	}
@@ -53,14 +52,14 @@ func (s *FileStore) Save(p *process.Process) error {
 
 	// Write data to temp file
 	if _, err := tempFile.Write(data); err != nil {
-		tempFile.Close()
-		os.Remove(tempPath)
+		_ = tempFile.Close()
+		_ = os.Remove(tempPath)
 		return fmt.Errorf("failed to write to temp file: %w", err)
 	}
 
 	// Close temp file
 	if err := tempFile.Close(); err != nil {
-		os.Remove(tempPath)
+		_ = os.Remove(tempPath)
 		return fmt.Errorf("failed to close temp file: %w", err)
 	}
 
@@ -86,7 +85,7 @@ func (s *FileStore) Load(id string) (*process.Process, error) {
 	}
 
 	// Read file content
-	data, err := ioutil.ReadFile(filePath)
+	data, err := os.ReadFile(filePath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read process file: %w", err)
 	}
@@ -133,7 +132,7 @@ func (s *FileStore) List() ([]string, error) {
 	}
 
 	// Read directory contents
-	entries, err := ioutil.ReadDir(s.baseDir)
+	entries, err := os.ReadDir(s.baseDir)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read storage directory: %w", err)
 	}
