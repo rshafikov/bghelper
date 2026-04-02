@@ -79,4 +79,3 @@ func init() {
 	// Add completion for process IDs
 	stopCmd.ValidArgsFunction = completeProcessIDs
 }
-

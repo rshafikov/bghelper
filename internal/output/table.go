@@ -48,9 +48,9 @@ func (tf *TableFormatter) FormatProcessList(processes []*process.Process) {
 	}
 
 	// Calculate smart column widths based on actual data
-	idWidth := 2      // Minimum: "ID"
-	nameWidth := 4    // Minimum: "NAME"
-	statusWidth := 6  // Minimum: "STATUS"
+	idWidth := 2         // Minimum: "ID"
+	nameWidth := 4       // Minimum: "NAME"
+	statusWidth := 6     // Minimum: "STATUS"
 	createdAtWidth := 10 // Fixed: "MM-DD HH:MM"
 	commandWidth := 7    // Minimum: "COMMAND"
 
