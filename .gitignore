@@ -4,8 +4,8 @@
 *.dll
 *.so
 *.dylib
-bghelper
-bgh
+/bghelper
+/bgh
 
 # Test binary
 *.test
