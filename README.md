@@ -17,14 +17,14 @@ A CLI tool for managing background processes. Start, stop, restart, and monitor 
 ### From Source
 
 ```bash
-git clone https://github.com/ra.shafikov/bghelper.git
+git clone https://github.com/rshafikov/bghelper.git
 cd bghelper
 make install
 ```
 
 ### From Release
 
-Download the appropriate binary for your platform from the [releases page](https://github.com/ra.shafikov/bghelper/releases).
+Download the appropriate binary for your platform from the [releases page](https://github.com/rshafikov/bghelper/releases).
 
 ## Usage
 
