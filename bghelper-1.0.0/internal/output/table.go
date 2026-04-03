@@ -48,11 +48,11 @@ func (tf *TableFormatter) FormatProcessList(processes []*process.Process) {
 	}
 
 	// Calculate smart column widths based on actual data
-	idWidth := 2       // Minimum: "ID"
-	nameWidth := 4     // Minimum: "NAME"
-	statusWidth := 6   // Minimum: "STATUS"
-	updatedWidth := 10 // Fixed: "MM-DD HH:MM"
-	commandWidth := 7  // Minimum: "COMMAND"
+	idWidth := 2         // Minimum: "ID"
+	nameWidth := 4       // Minimum: "NAME"
+	statusWidth := 6     // Minimum: "STATUS"
+	createdAtWidth := 10 // Fixed: "MM-DD HH:MM"
+	commandWidth := 7    // Minimum: "COMMAND"
 
 	// Find maximum widths based on actual data
 	for _, p := range processes {
@@ -82,7 +82,7 @@ func (tf *TableFormatter) FormatProcessList(processes []*process.Process) {
 	if nameWidth > 15 {
 		nameWidth = 15
 	}
-	maxCommandWidth := tf.width - idWidth - nameWidth - statusWidth - updatedWidth - 12 // 12 for borders and padding
+	maxCommandWidth := tf.width - idWidth - nameWidth - statusWidth - createdAtWidth - 12 // 12 for borders and padding
 	if maxCommandWidth < 20 {
 		maxCommandWidth = 20
 	}
@@ -95,7 +95,7 @@ func (tf *TableFormatter) FormatProcessList(processes []*process.Process) {
 		strings.Repeat("-", idWidth+2),
 		strings.Repeat("-", nameWidth+2),
 		strings.Repeat("-", statusWidth+2),
-		strings.Repeat("-", updatedWidth+3),
+		strings.Repeat("-", createdAtWidth+3),
 		strings.Repeat("-", commandWidth+2))
 
 	// Print header
@@ -103,7 +103,7 @@ func (tf *TableFormatter) FormatProcessList(processes []*process.Process) {
 		idWidth, "ID",
 		nameWidth, "NAME",
 		statusWidth, "STATUS",
-		updatedWidth, "UPDATED",
+		createdAtWidth, "CREATED",
 		commandWidth, "COMMAND")
 
 	// Print header/data separator
@@ -111,12 +111,12 @@ func (tf *TableFormatter) FormatProcessList(processes []*process.Process) {
 		strings.Repeat("=", idWidth+2),
 		strings.Repeat("=", nameWidth+2),
 		strings.Repeat("=", statusWidth+2),
-		strings.Repeat("=", updatedWidth+3),
+		strings.Repeat("=", createdAtWidth+3),
 		strings.Repeat("=", commandWidth+2))
 
 	// Print rows
 	for _, p := range processes {
-		tf.printRow(p, idWidth, nameWidth, statusWidth, commandWidth, updatedWidth)
+		tf.printRow(p, idWidth, nameWidth, statusWidth, commandWidth, createdAtWidth)
 	}
 
 	// Print bottom border
@@ -124,12 +124,12 @@ func (tf *TableFormatter) FormatProcessList(processes []*process.Process) {
 		strings.Repeat("-", idWidth+2),
 		strings.Repeat("-", nameWidth+2),
 		strings.Repeat("-", statusWidth+2),
-		strings.Repeat("-", updatedWidth+3),
+		strings.Repeat("-", createdAtWidth+3),
 		strings.Repeat("-", commandWidth+2))
 }
 
 // printRow prints a single process row
-func (tf *TableFormatter) printRow(p *process.Process, idWidth, nameWidth, statusWidth, commandWidth, updatedWidth int) {
+func (tf *TableFormatter) printRow(p *process.Process, idWidth, nameWidth, statusWidth, commandWidth, createdAtWidth int) {
 	// Truncate command if needed
 	cmd := truncateString(p.Command, commandWidth)
 
@@ -140,8 +140,8 @@ func (tf *TableFormatter) printRow(p *process.Process, idWidth, nameWidth, statu
 	}
 	name = truncateString(name, nameWidth)
 
-	// Format updated at (compact format)
-	updatedAt := formatTimeCompact(p.UpdatedAt)
+	// Format created at (compact format)
+	createdAt := formatTimeCompact(p.CreatedAt)
 
 	// Color-code status
 	var statusStr string
@@ -161,7 +161,7 @@ func (tf *TableFormatter) printRow(p *process.Process, idWidth, nameWidth, statu
 		idWidth, p.ID,
 		nameWidth, name,
 		statusStr,
-		updatedWidth, updatedAt,
+		createdAtWidth, createdAt,
 		commandWidth, cmd)
 }
 

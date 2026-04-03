@@ -39,7 +39,6 @@ func (m *Manager) Start(id string, command string) (*Process, error) {
 	p := NewProcess(id, command)
 	p.Status = StatusRunning
 	p.StartedAt = time.Now()
-	p.UpdatedAt = time.Now()
 
 	// Get log file path
 	p.LogsPath = m.store.GetLogsPath(id)
@@ -125,7 +124,6 @@ func (m *Manager) Stop(id string) error {
 	// Set exit code to indicate interrupted
 	exitCode := 130 // 128 + 2 (SIGINT)
 	p.ExitCode = &exitCode
-	p.UpdatedAt = time.Now()
 
 	// Persist the updated state immediately
 	if saveErr := m.store.Save(p); saveErr != nil {
@@ -172,7 +170,6 @@ func (m *Manager) monitorProcess(id string, cmd *exec.Cmd, logFile io.Closer) {
 		p.Status = StatusStopped
 		p.ExitCode = &exitCode
 	}
-	p.UpdatedAt = time.Now()
 
 	// Persist the updated state immediately
 	if saveErr := m.store.Save(p); saveErr != nil {
@@ -294,7 +291,6 @@ func (m *Manager) Restart(id string) (*Process, error) {
 	// Reset process state for restart
 	p.Status = StatusRunning
 	p.StartedAt = time.Now()
-	p.UpdatedAt = time.Now()
 	p.ExitCode = nil
 
 	// Ensure log file exists

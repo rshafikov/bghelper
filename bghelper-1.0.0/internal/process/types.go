@@ -43,9 +43,6 @@ type Process struct {
 	// CreatedAt is when the process definition was created
 	CreatedAt time.Time `yaml:"created_at"`
 
-	// UpdatedAt is when the process was last modified
-	UpdatedAt time.Time `yaml:"updated_at"`
-
 	// StartedAt is when the process was last started (zero if never started)
 	StartedAt time.Time `yaml:"started_at"`
 
@@ -58,14 +55,12 @@ type Process struct {
 
 // NewProcess creates a new Process with default values
 func NewProcess(id, command string) *Process {
-	now := time.Now()
 	return &Process{
 		ID:        id,
 		Command:   command,
 		Status:    StatusStopped,
 		PID:       0,
-		CreatedAt: now,
-		UpdatedAt: now,
+		CreatedAt: time.Now(),
 		StartedAt: time.Time{},
 		ExitCode:  nil,
 	}

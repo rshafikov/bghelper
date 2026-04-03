@@ -16,7 +16,6 @@ func TestProcessMarshalYAML(t *testing.T) {
 		Status:    StatusRunning,
 		PID:       12345,
 		CreatedAt: time.Date(2026, 3, 30, 10, 0, 0, 0, time.UTC),
-		UpdatedAt: time.Date(2026, 3, 30, 10, 5, 0, 0, time.UTC),
 		StartedAt: time.Date(2026, 3, 30, 10, 5, 0, 0, time.UTC),
 		ExitCode:  &exitCode,
 	}
@@ -32,7 +31,6 @@ func TestProcessMarshalYAML(t *testing.T) {
 command: ssh -L 8080:localhost:8080 user@server
 pid: 12345
 created_at: 2026-03-30T10:00:00Z
-updated_at: 2026-03-30T10:05:00Z
 started_at: 2026-03-30T10:05:00Z
 exit_code: 0
 `
