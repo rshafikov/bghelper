@@ -51,7 +51,7 @@ func (tf *TableFormatter) FormatProcessList(processes []*process.Process) {
 	idWidth := 2       // Minimum: "ID"
 	nameWidth := 4     // Minimum: "NAME"
 	statusWidth := 6   // Minimum: "STATUS"
-	updatedWidth := 10 // Fixed: "MM-DD HH:MM"
+	timeWidth := 10    // Fixed: "MM-DD HH:MM"
 	commandWidth := 7  // Minimum: "COMMAND"
 
 	// Find maximum widths based on actual data
@@ -82,54 +82,58 @@ func (tf *TableFormatter) FormatProcessList(processes []*process.Process) {
 	if nameWidth > 15 {
 		nameWidth = 15
 	}
-	maxCommandWidth := tf.width - idWidth - nameWidth - statusWidth - updatedWidth - 12 // 12 for borders and padding
-	if maxCommandWidth < 20 {
-		maxCommandWidth = 20
+	maxCommandWidth := tf.width - idWidth - nameWidth - statusWidth - (timeWidth * 2) - 14 // 14 for borders and padding
+	if maxCommandWidth < 15 {
+		maxCommandWidth = 15
 	}
 	if commandWidth > maxCommandWidth {
 		commandWidth = maxCommandWidth
 	}
 
 	// Print top border
-	fmt.Fprintf(tf.writer, "+%s+%s+%s+%s+%s+\n",
+	fmt.Fprintf(tf.writer, "+%s+%s+%s+%s+%s+%s+\n",
 		strings.Repeat("-", idWidth+2),
 		strings.Repeat("-", nameWidth+2),
 		strings.Repeat("-", statusWidth+2),
-		strings.Repeat("-", updatedWidth+3),
+		strings.Repeat("-", timeWidth+2),
+		strings.Repeat("-", timeWidth+2),
 		strings.Repeat("-", commandWidth+2))
 
 	// Print header
-	fmt.Fprintf(tf.writer, "| %-*s | %-*s | %-*s | %-*s  | %-*s |\n",
+	fmt.Fprintf(tf.writer, "| %-*s | %-*s | %-*s | %-*s | %-*s | %-*s |\n",
 		idWidth, "ID",
 		nameWidth, "NAME",
 		statusWidth, "STATUS",
-		updatedWidth, "UPDATED",
+		timeWidth, "CREATED",
+		timeWidth, "UPDATED",
 		commandWidth, "COMMAND")
 
 	// Print header/data separator
-	fmt.Fprintf(tf.writer, "+%s+%s+%s+%s+%s+\n",
+	fmt.Fprintf(tf.writer, "+%s+%s+%s+%s+%s+%s+\n",
 		strings.Repeat("=", idWidth+2),
 		strings.Repeat("=", nameWidth+2),
 		strings.Repeat("=", statusWidth+2),
-		strings.Repeat("=", updatedWidth+3),
+		strings.Repeat("=", timeWidth+2),
+		strings.Repeat("=", timeWidth+2),
 		strings.Repeat("=", commandWidth+2))
 
 	// Print rows
 	for _, p := range processes {
-		tf.printRow(p, idWidth, nameWidth, statusWidth, commandWidth, updatedWidth)
+		tf.printRow(p, idWidth, nameWidth, statusWidth, commandWidth, timeWidth)
 	}
 
 	// Print bottom border
-	fmt.Fprintf(tf.writer, "+%s+%s+%s+%s+%s+\n",
+	fmt.Fprintf(tf.writer, "+%s+%s+%s+%s+%s+%s+\n",
 		strings.Repeat("-", idWidth+2),
 		strings.Repeat("-", nameWidth+2),
 		strings.Repeat("-", statusWidth+2),
-		strings.Repeat("-", updatedWidth+3),
+		strings.Repeat("-", timeWidth+2),
+		strings.Repeat("-", timeWidth+2),
 		strings.Repeat("-", commandWidth+2))
 }
 
 // printRow prints a single process row
-func (tf *TableFormatter) printRow(p *process.Process, idWidth, nameWidth, statusWidth, commandWidth, updatedWidth int) {
+func (tf *TableFormatter) printRow(p *process.Process, idWidth, nameWidth, statusWidth, commandWidth, timeWidth int) {
 	// Truncate command if needed
 	cmd := truncateString(p.Command, commandWidth)
 
@@ -140,7 +144,8 @@ func (tf *TableFormatter) printRow(p *process.Process, idWidth, nameWidth, statu
 	}
 	name = truncateString(name, nameWidth)
 
-	// Format updated at (compact format)
+	// Format timestamps (compact format)
+	createdAt := formatTimeCompact(p.CreatedAt)
 	updatedAt := formatTimeCompact(p.UpdatedAt)
 
 	// Color-code status
@@ -157,11 +162,12 @@ func (tf *TableFormatter) printRow(p *process.Process, idWidth, nameWidth, statu
 	}
 
 	// Print row with borders
-	fmt.Fprintf(tf.writer, "| %-*s | %-*s | %s | %-*s | %-*s |\n",
+	fmt.Fprintf(tf.writer, "| %-*s | %-*s | %s | %-*s | %-*s | %-*s |\n",
 		idWidth, p.ID,
 		nameWidth, name,
 		statusStr,
-		updatedWidth, updatedAt,
+		timeWidth, createdAt,
+		timeWidth, updatedAt,
 		commandWidth, cmd)
 }
 
