@@ -51,7 +51,7 @@ func (tf *TableFormatter) FormatProcessList(processes []*process.Process) {
 	idWidth := 2       // Minimum: "ID"
 	nameWidth := 4     // Minimum: "NAME"
 	statusWidth := 6   // Minimum: "STATUS"
-	timeWidth := 10    // Fixed: "MM-DD HH:MM"
+	timeWidth := 11    // Fixed: "MM-DD HH:MM"
 	commandWidth := 7  // Minimum: "COMMAND"
 
 	// Find maximum widths based on actual data
